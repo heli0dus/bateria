@@ -6298,6 +6298,132 @@ var $author$project$Main$setSound = F4(
 			});
 		return A2(inner, 0, beats);
 	});
+var $elm$core$List$takeReverse = F3(
+	function (n, list, kept) {
+		takeReverse:
+		while (true) {
+			if (n <= 0) {
+				return kept;
+			} else {
+				if (!list.b) {
+					return kept;
+				} else {
+					var x = list.a;
+					var xs = list.b;
+					var $temp$n = n - 1,
+						$temp$list = xs,
+						$temp$kept = A2($elm$core$List$cons, x, kept);
+					n = $temp$n;
+					list = $temp$list;
+					kept = $temp$kept;
+					continue takeReverse;
+				}
+			}
+		}
+	});
+var $elm$core$List$takeTailRec = F2(
+	function (n, list) {
+		return $elm$core$List$reverse(
+			A3($elm$core$List$takeReverse, n, list, _List_Nil));
+	});
+var $elm$core$List$takeFast = F3(
+	function (ctr, n, list) {
+		if (n <= 0) {
+			return _List_Nil;
+		} else {
+			var _v0 = _Utils_Tuple2(n, list);
+			_v0$1:
+			while (true) {
+				_v0$5:
+				while (true) {
+					if (!_v0.b.b) {
+						return list;
+					} else {
+						if (_v0.b.b.b) {
+							switch (_v0.a) {
+								case 1:
+									break _v0$1;
+								case 2:
+									var _v2 = _v0.b;
+									var x = _v2.a;
+									var _v3 = _v2.b;
+									var y = _v3.a;
+									return _List_fromArray(
+										[x, y]);
+								case 3:
+									if (_v0.b.b.b.b) {
+										var _v4 = _v0.b;
+										var x = _v4.a;
+										var _v5 = _v4.b;
+										var y = _v5.a;
+										var _v6 = _v5.b;
+										var z = _v6.a;
+										return _List_fromArray(
+											[x, y, z]);
+									} else {
+										break _v0$5;
+									}
+								default:
+									if (_v0.b.b.b.b && _v0.b.b.b.b.b) {
+										var _v7 = _v0.b;
+										var x = _v7.a;
+										var _v8 = _v7.b;
+										var y = _v8.a;
+										var _v9 = _v8.b;
+										var z = _v9.a;
+										var _v10 = _v9.b;
+										var w = _v10.a;
+										var tl = _v10.b;
+										return (ctr > 1000) ? A2(
+											$elm$core$List$cons,
+											x,
+											A2(
+												$elm$core$List$cons,
+												y,
+												A2(
+													$elm$core$List$cons,
+													z,
+													A2(
+														$elm$core$List$cons,
+														w,
+														A2($elm$core$List$takeTailRec, n - 4, tl))))) : A2(
+											$elm$core$List$cons,
+											x,
+											A2(
+												$elm$core$List$cons,
+												y,
+												A2(
+													$elm$core$List$cons,
+													z,
+													A2(
+														$elm$core$List$cons,
+														w,
+														A3($elm$core$List$takeFast, ctr + 1, n - 4, tl)))));
+									} else {
+										break _v0$5;
+									}
+							}
+						} else {
+							if (_v0.a === 1) {
+								break _v0$1;
+							} else {
+								break _v0$5;
+							}
+						}
+					}
+				}
+				return list;
+			}
+			var _v1 = _v0.b;
+			var x = _v1.a;
+			return _List_fromArray(
+				[x]);
+		}
+	});
+var $elm$core$List$take = F2(
+	function (n, list) {
+		return A3($elm$core$List$takeFast, 0, n, list);
+	});
 var $author$project$Main$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
@@ -6320,6 +6446,31 @@ var $author$project$Main$update = F2(
 						beats: A4($author$project$Main$setSound, model.toolbar.sound, beat, snd, track.beats)
 					});
 				return _Utils_update(
+					model,
+					{track: new_track});
+			case 'AddLine':
+				var track = model.track;
+				var new_track = _Utils_update(
+					track,
+					{
+						beats: _Utils_ap(
+							track.beats,
+							A2($elm$core$List$repeat, 4, $author$project$Main$emptyBeat))
+					});
+				return _Utils_update(
+					model,
+					{track: new_track});
+			case 'RemoveLine':
+				var track = model.track;
+				var new_track = _Utils_update(
+					track,
+					{
+						beats: A2(
+							$elm$core$List$take,
+							$elm$core$List$length(track.beats) - 4,
+							track.beats)
+					});
+				return ($elm$core$List$length(model.track.beats) <= 4) ? model : _Utils_update(
 					model,
 					{track: new_track});
 			default:
@@ -7780,132 +7931,6 @@ var $rtfeldman$elm_css$Css$Structure$styleBlockToMediaRule = F2(
 			return declaration;
 		}
 	});
-var $elm$core$List$takeReverse = F3(
-	function (n, list, kept) {
-		takeReverse:
-		while (true) {
-			if (n <= 0) {
-				return kept;
-			} else {
-				if (!list.b) {
-					return kept;
-				} else {
-					var x = list.a;
-					var xs = list.b;
-					var $temp$n = n - 1,
-						$temp$list = xs,
-						$temp$kept = A2($elm$core$List$cons, x, kept);
-					n = $temp$n;
-					list = $temp$list;
-					kept = $temp$kept;
-					continue takeReverse;
-				}
-			}
-		}
-	});
-var $elm$core$List$takeTailRec = F2(
-	function (n, list) {
-		return $elm$core$List$reverse(
-			A3($elm$core$List$takeReverse, n, list, _List_Nil));
-	});
-var $elm$core$List$takeFast = F3(
-	function (ctr, n, list) {
-		if (n <= 0) {
-			return _List_Nil;
-		} else {
-			var _v0 = _Utils_Tuple2(n, list);
-			_v0$1:
-			while (true) {
-				_v0$5:
-				while (true) {
-					if (!_v0.b.b) {
-						return list;
-					} else {
-						if (_v0.b.b.b) {
-							switch (_v0.a) {
-								case 1:
-									break _v0$1;
-								case 2:
-									var _v2 = _v0.b;
-									var x = _v2.a;
-									var _v3 = _v2.b;
-									var y = _v3.a;
-									return _List_fromArray(
-										[x, y]);
-								case 3:
-									if (_v0.b.b.b.b) {
-										var _v4 = _v0.b;
-										var x = _v4.a;
-										var _v5 = _v4.b;
-										var y = _v5.a;
-										var _v6 = _v5.b;
-										var z = _v6.a;
-										return _List_fromArray(
-											[x, y, z]);
-									} else {
-										break _v0$5;
-									}
-								default:
-									if (_v0.b.b.b.b && _v0.b.b.b.b.b) {
-										var _v7 = _v0.b;
-										var x = _v7.a;
-										var _v8 = _v7.b;
-										var y = _v8.a;
-										var _v9 = _v8.b;
-										var z = _v9.a;
-										var _v10 = _v9.b;
-										var w = _v10.a;
-										var tl = _v10.b;
-										return (ctr > 1000) ? A2(
-											$elm$core$List$cons,
-											x,
-											A2(
-												$elm$core$List$cons,
-												y,
-												A2(
-													$elm$core$List$cons,
-													z,
-													A2(
-														$elm$core$List$cons,
-														w,
-														A2($elm$core$List$takeTailRec, n - 4, tl))))) : A2(
-											$elm$core$List$cons,
-											x,
-											A2(
-												$elm$core$List$cons,
-												y,
-												A2(
-													$elm$core$List$cons,
-													z,
-													A2(
-														$elm$core$List$cons,
-														w,
-														A3($elm$core$List$takeFast, ctr + 1, n - 4, tl)))));
-									} else {
-										break _v0$5;
-									}
-							}
-						} else {
-							if (_v0.a === 1) {
-								break _v0$1;
-							} else {
-								break _v0$5;
-							}
-						}
-					}
-				}
-				return list;
-			}
-			var _v1 = _v0.b;
-			var x = _v1.a;
-			return _List_fromArray(
-				[x]);
-		}
-	});
-var $elm$core$List$take = F2(
-	function (n, list) {
-		return A3($elm$core$List$takeFast, 0, n, list);
-	});
 var $rtfeldman$elm_css$Css$Preprocess$Resolve$toDocumentRule = F5(
 	function (str1, str2, str3, str4, declaration) {
 		if (declaration.$ === 'StyleBlockDeclaration') {
@@ -8434,13 +8459,21 @@ var $author$project$Main$indexedList = function () {
 }();
 var $rtfeldman$elm_css$Css$inlineBlock = {display: $rtfeldman$elm_css$Css$Structure$Compatible, value: 'inline-block'};
 var $rtfeldman$elm_css$Css$left = $rtfeldman$elm_css$Css$prop1('left');
-var $rtfeldman$elm_css$Css$margin = $rtfeldman$elm_css$Css$prop1('margin');
-var $rtfeldman$elm_css$Css$prop2 = F3(
-	function (key, argA, argB) {
-		return A2($rtfeldman$elm_css$Css$property, key, argA.value + (' ' + argB.value));
-	});
-var $rtfeldman$elm_css$Css$margin2 = $rtfeldman$elm_css$Css$prop2('margin');
-var $rtfeldman$elm_css$Css$maxWidth = $rtfeldman$elm_css$Css$prop1('max-width');
+var $author$project$Main$AddLine = {$: 'AddLine'};
+var $author$project$Main$RemoveLine = {$: 'RemoveLine'};
+var $rtfeldman$elm_css$Css$backgroundColor = function (c) {
+	return A2($rtfeldman$elm_css$Css$property, 'background-color', c.value);
+};
+var $rtfeldman$elm_css$Css$justifyContent = function (fn) {
+	return A3(
+		$rtfeldman$elm_css$Css$Internal$getOverloadedProperty,
+		'justifyContent',
+		'justify-content',
+		fn($rtfeldman$elm_css$Css$Internal$lengthForOverloadedProperty));
+};
+var $rtfeldman$elm_css$Css$marginLeft = $rtfeldman$elm_css$Css$prop1('margin-left');
+var $rtfeldman$elm_css$Css$marginRight = $rtfeldman$elm_css$Css$prop1('margin-right');
+var $rtfeldman$elm_css$Css$middle = $rtfeldman$elm_css$Css$prop1('middle');
 var $elm$virtual_dom$VirtualDom$Normal = function (a) {
 	return {$: 'Normal', a: a};
 };
@@ -8466,6 +8499,82 @@ var $rtfeldman$elm_css$Html$Styled$Events$onClick = function (msg) {
 		'click',
 		$elm$json$Json$Decode$succeed(msg));
 };
+var $rtfeldman$elm_css$Css$right = $rtfeldman$elm_css$Css$prop1('right');
+var $rtfeldman$elm_css$VirtualDom$Styled$Unstyled = function (a) {
+	return {$: 'Unstyled', a: a};
+};
+var $rtfeldman$elm_css$VirtualDom$Styled$text = function (str) {
+	return $rtfeldman$elm_css$VirtualDom$Styled$Unstyled(
+		$elm$virtual_dom$VirtualDom$text(str));
+};
+var $rtfeldman$elm_css$Html$Styled$text = $rtfeldman$elm_css$VirtualDom$Styled$text;
+var $rtfeldman$elm_css$Css$width = $rtfeldman$elm_css$Css$prop1('width');
+var $author$project$Main$lineAdders = A2(
+	$rtfeldman$elm_css$Html$Styled$div,
+	_List_fromArray(
+		[
+			$rtfeldman$elm_css$Html$Styled$Attributes$css(
+			_List_fromArray(
+				[
+					$author$project$Main$horizontalContainer,
+					$rtfeldman$elm_css$Css$alignSelf($rtfeldman$elm_css$Css$right),
+					$rtfeldman$elm_css$Css$marginLeft($rtfeldman$elm_css$Css$auto),
+					$rtfeldman$elm_css$Css$marginRight(
+					$rtfeldman$elm_css$Css$px(10))
+				]))
+		]),
+	_List_fromArray(
+		[
+			A2(
+			$rtfeldman$elm_css$Html$Styled$div,
+			_List_fromArray(
+				[
+					$rtfeldman$elm_css$Html$Styled$Events$onClick($author$project$Main$RemoveLine),
+					$rtfeldman$elm_css$Html$Styled$Attributes$css(
+					_List_fromArray(
+						[
+							$rtfeldman$elm_css$Css$width(
+							$rtfeldman$elm_css$Css$px(50)),
+							$rtfeldman$elm_css$Css$height(
+							$rtfeldman$elm_css$Css$px(50)),
+							$rtfeldman$elm_css$Css$backgroundColor(
+							$rtfeldman$elm_css$Css$hex('#e78284')),
+							$rtfeldman$elm_css$Css$alignItems($rtfeldman$elm_css$Css$middle),
+							$rtfeldman$elm_css$Css$justifyContent($rtfeldman$elm_css$Css$center)
+						]))
+				]),
+			_List_fromArray(
+				[
+					$rtfeldman$elm_css$Html$Styled$text('-')
+				])),
+			A2(
+			$rtfeldman$elm_css$Html$Styled$div,
+			_List_fromArray(
+				[
+					$rtfeldman$elm_css$Html$Styled$Events$onClick($author$project$Main$AddLine),
+					$rtfeldman$elm_css$Html$Styled$Attributes$css(
+					_List_fromArray(
+						[
+							$rtfeldman$elm_css$Css$width(
+							$rtfeldman$elm_css$Css$px(50)),
+							$rtfeldman$elm_css$Css$height(
+							$rtfeldman$elm_css$Css$px(50)),
+							$rtfeldman$elm_css$Css$backgroundColor(
+							$rtfeldman$elm_css$Css$hex('#a6d189'))
+						]))
+				]),
+			_List_fromArray(
+				[
+					$rtfeldman$elm_css$Html$Styled$text('+')
+				]))
+		]));
+var $rtfeldman$elm_css$Css$margin = $rtfeldman$elm_css$Css$prop1('margin');
+var $rtfeldman$elm_css$Css$prop2 = F3(
+	function (key, argA, argB) {
+		return A2($rtfeldman$elm_css$Css$property, key, argA.value + (' ' + argB.value));
+	});
+var $rtfeldman$elm_css$Css$margin2 = $rtfeldman$elm_css$Css$prop2('margin');
+var $rtfeldman$elm_css$Css$maxWidth = $rtfeldman$elm_css$Css$prop1('max-width');
 var $elm$core$List$drop = F2(
 	function (n, list) {
 		drop:
@@ -8507,9 +8616,6 @@ var $author$project$Main$AddSound = F2(
 	function (a, b) {
 		return {$: 'AddSound', a: a, b: b};
 	});
-var $rtfeldman$elm_css$Css$backgroundColor = function (c) {
-	return A2($rtfeldman$elm_css$Css$property, 'background-color', c.value);
-};
 var $rtfeldman$elm_css$VirtualDom$Styled$property = F2(
 	function (key, value) {
 		return A3(
@@ -8528,7 +8634,6 @@ var $rtfeldman$elm_css$Html$Styled$Attributes$stringProperty = F2(
 var $rtfeldman$elm_css$Html$Styled$Attributes$class = $rtfeldman$elm_css$Html$Styled$Attributes$stringProperty('className');
 var $rtfeldman$elm_css$Css$end = $rtfeldman$elm_css$Css$prop1('end');
 var $rtfeldman$elm_css$Html$Styled$img = $rtfeldman$elm_css$Html$Styled$node('img');
-var $rtfeldman$elm_css$Css$width = $rtfeldman$elm_css$Css$prop1('width');
 var $author$project$Main$soundStyle = $rtfeldman$elm_css$Css$batch(
 	_List_fromArray(
 		[
@@ -8545,7 +8650,7 @@ var $author$project$Main$renderSound = function (sound) {
 				$rtfeldman$elm_css$Html$Styled$img,
 				_List_fromArray(
 					[
-						$rtfeldman$elm_css$Html$Styled$Attributes$src('./assets/tch.svg'),
+						$rtfeldman$elm_css$Html$Styled$Attributes$src('../assets/tch.svg'),
 						$rtfeldman$elm_css$Html$Styled$Attributes$css(
 						_List_fromArray(
 							[$author$project$Main$soundStyle]))
@@ -8556,7 +8661,7 @@ var $author$project$Main$renderSound = function (sound) {
 				$rtfeldman$elm_css$Html$Styled$img,
 				_List_fromArray(
 					[
-						$rtfeldman$elm_css$Html$Styled$Attributes$src('./assets/ton.svg'),
+						$rtfeldman$elm_css$Html$Styled$Attributes$src('../assets/ton.svg'),
 						$rtfeldman$elm_css$Html$Styled$Attributes$css(
 						_List_fromArray(
 							[$author$project$Main$soundStyle]))
@@ -8567,7 +8672,7 @@ var $author$project$Main$renderSound = function (sound) {
 				$rtfeldman$elm_css$Html$Styled$img,
 				_List_fromArray(
 					[
-						$rtfeldman$elm_css$Html$Styled$Attributes$src('./assets/tin.svg'),
+						$rtfeldman$elm_css$Html$Styled$Attributes$src('../assets/tin.svg'),
 						$rtfeldman$elm_css$Html$Styled$Attributes$css(
 						_List_fromArray(
 							[$author$project$Main$soundStyle]))
@@ -8578,7 +8683,7 @@ var $author$project$Main$renderSound = function (sound) {
 				$rtfeldman$elm_css$Html$Styled$img,
 				_List_fromArray(
 					[
-						$rtfeldman$elm_css$Html$Styled$Attributes$src('./assets/sometch.svg'),
+						$rtfeldman$elm_css$Html$Styled$Attributes$src('../assets/sometch.svg'),
 						$rtfeldman$elm_css$Html$Styled$Attributes$css(
 						_List_fromArray(
 							[$author$project$Main$soundStyle]))
@@ -8872,32 +8977,35 @@ var $author$project$Main$view = function (model) {
 								$rtfeldman$elm_css$Css$alignItems($rtfeldman$elm_css$Css$center)
 							]))
 					]),
-				A2(
-					$elm$core$List$map,
-					function (sound) {
-						return A2(
-							$rtfeldman$elm_css$Html$Styled$div,
-							_List_fromArray(
-								[
-									$rtfeldman$elm_css$Html$Styled$Attributes$css(
-									_List_fromArray(
-										[
-											$rtfeldman$elm_css$Css$width(
-											$rtfeldman$elm_css$Css$px(50)),
-											$rtfeldman$elm_css$Css$height(
-											$rtfeldman$elm_css$Css$px(50)),
-											$author$project$Main$borderedBox,
-											A2($author$project$Main$soundBorder, model, sound)
-										])),
-									$rtfeldman$elm_css$Html$Styled$Events$onClick(
-									A2($author$project$Main$soundSelectorMeessage, model, sound))
-								]),
-							_List_fromArray(
-								[
-									$author$project$Main$renderSound(sound)
-								]));
-					},
-					model.toolbar.sounds)),
+				_Utils_ap(
+					A2(
+						$elm$core$List$map,
+						function (sound) {
+							return A2(
+								$rtfeldman$elm_css$Html$Styled$div,
+								_List_fromArray(
+									[
+										$rtfeldman$elm_css$Html$Styled$Attributes$css(
+										_List_fromArray(
+											[
+												$rtfeldman$elm_css$Css$width(
+												$rtfeldman$elm_css$Css$px(50)),
+												$rtfeldman$elm_css$Css$height(
+												$rtfeldman$elm_css$Css$px(50)),
+												$author$project$Main$borderedBox,
+												A2($author$project$Main$soundBorder, model, sound)
+											])),
+										$rtfeldman$elm_css$Html$Styled$Events$onClick(
+										A2($author$project$Main$soundSelectorMeessage, model, sound))
+									]),
+								_List_fromArray(
+									[
+										$author$project$Main$renderSound(sound)
+									]));
+						},
+						model.toolbar.sounds),
+					_List_fromArray(
+						[$author$project$Main$lineAdders]))),
 				A2(
 				$rtfeldman$elm_css$Html$Styled$div,
 				_List_fromArray(
