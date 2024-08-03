@@ -53,6 +53,24 @@ type Msg
   | CnahgeAssets AssetStyle
   | SetActiveSound Sound
 
+setSound : Sound -> Int -> Int -> List Beat -> List Beat
+setSound snd beat idx beats = 
+    let
+        inner cur beatss = if (cur == beat) then 
+                case beatss of
+                ((BerimbauBeat x)::xs) -> case idx of
+                    0 -> (BerimbauBeat {x | beat = snd}) :: xs
+                    1 -> (BerimbauBeat {x | firstOf3 = snd}) :: xs
+                    2 -> (BerimbauBeat {x | firstOf2 = snd}) :: xs
+                    3 -> (BerimbauBeat {x | secondOf3 = snd}) :: xs
+                    4 -> (BerimbauBeat {x | secondOf2 = snd}) :: xs
+                    5 -> (BerimbauBeat {x | thirdOf3 = snd}) :: xs
+                    _ -> beatss
+                [] -> []
+                else case beatss of
+                    (x :: xs) -> x :: (inner (cur + 1) xs)
+                    [] -> []
+    in inner 0 beats
 
 update : Msg -> Model -> Model
 update msg model = case msg of
@@ -61,6 +79,11 @@ update msg model = case msg of
             toolbar = model.toolbar
             newToolbar = {toolbar| sound = sound}
         in {model | toolbar = newToolbar}
+    AddSound beat snd -> 
+        let
+            track = model.track
+            new_track = {track| beats = setSound model.toolbar.sound beat snd track.beats}
+        in {model| track = new_track}
     _ -> model
 
 
@@ -103,8 +126,8 @@ view model = div [css [width (px 1000), padding (px 50), alignSelf center, align
                     (\xs -> div [ css [ horizontalContainer
                                       , float left, margin (px 10)]
                                 ] 
-                                (List.map2 renderBeat (List.range 0 (length xs)) xs)
-                    ) (partitionBy 4 model.track.beats))]
+                                (List.map  (\(idx, beat) -> renderBeat idx beat) xs)
+                    ) (partitionBy 4 (indexedList model.track.beats)))]
 --   div [class "app"
 --     [ div [class "toolbar"] [ text "-" ]
 --     , div [class "tracks"] (List.map trackHtml model.tracks) 
@@ -125,8 +148,13 @@ partitionBy sz xs = case xs of
 renderBeat : Int -> Beat -> Html Msg
 renderBeat idx (BerimbauBeat beat) = 
     div [class "horizontal-container", css [horizontalContainer, width (px 200), height (px 100), margin2 (px 0) (px -1)]]
-        [
-        div [class "strong-beat", css [width (pct 25), height (pct 100), backgroundColor (hex "#e78284"), borderedBox, alignItems end]] [renderSound beat.beat]
+        [ --(text (String.fromInt idx)),
+        div [class "strong-beat", css [ width (pct 25)
+                                      , height (pct 100)
+                                      , backgroundColor (hex "#e78284")
+                                      , borderedBox, alignItems end]
+                                      , onClick (AddSound idx 0)] 
+                                      [renderSound beat.beat]
         , div [class "vertical-container", css [height (pct 100), width (pct 75), margin4 (px 0) (px -1) (px -1) (px 0)]]
             [ div 
                 [ class "horizontal-container"
@@ -134,13 +162,13 @@ renderBeat idx (BerimbauBeat beat) =
                       , width (pct 100)
                       , horizontalContainer]
                 ]
-                [ div [class "weak-sound", css [width (pct 50), height (pct 100), borderedBox, backgroundColor (hex "#ffffff")]] [renderSound beat.firstOf2]
-                , div [class "weak-sound", css [width (pct 50), height (pct 100), borderedBox, backgroundColor (hex "#ffffff")]] [renderSound beat.secondOf2]
+                [ div [class "weak-sound", onClick (AddSound idx 2), css [width (pct 50), height (pct 100), borderedBox, backgroundColor (hex "#ffffff")]] [renderSound beat.firstOf2]
+                , div [class "weak-sound", onClick (AddSound idx 4), css [width (pct 50), height (pct 100), borderedBox, backgroundColor (hex "#ffffff")]] [renderSound beat.secondOf2]
                 ]
             , div [class "horizontal-container", css [height (pct 50), width (pct 100), horizontalContainer]]
-                [ div [class "weak-sound", css [width (pct 33), height (pct 100), backgroundColor (hex "#ffffff"), borderedBox, overflowX visible]] [renderSound beat.firstOf3]
-                , div [class "off-beat",   css [width (pct 33), height (pct 100), backgroundColor (hex "#99d1db"), borderedBox, overflowX visible]] [renderSound beat.secondOf3]
-                , div [class "weak-sound", css [width (pct 33), height (pct 100), backgroundColor (hex "#ffffff"), borderedBox, overflowX visible]] [renderSound beat.thirdOf3]
+                [ div [class "weak-sound", onClick (AddSound idx 1), css [width (pct 33), height (pct 100), backgroundColor (hex "#ffffff"), borderedBox, overflowX visible]] [renderSound beat.firstOf3]
+                , div [class "off-beat", onClick (AddSound idx 3),   css [width (pct 33), height (pct 100), backgroundColor (hex "#99d1db"), borderedBox, overflowX visible]] [renderSound beat.secondOf3]
+                , div [class "weak-sound", onClick (AddSound idx 5), css [width (pct 33), height (pct 100), backgroundColor (hex "#ffffff"), borderedBox, overflowX visible]] [renderSound beat.thirdOf3]
                 ]
             ]
         ]
