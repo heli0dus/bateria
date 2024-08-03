@@ -122,15 +122,24 @@ lineAdders = div [css [horizontalContainer, alignSelf right, marginLeft auto, ma
                         [ div [onClick RemoveLine, css [borderedBox, width (px 50), height (px 50), backgroundColor (hex "#e78284"), alignItems center, justifyContent center]] [text "-"]
                         , div [onClick AddLine, css [borderedBox, width (px 50), height (px 50), backgroundColor (hex "#a6d189"), alignItems center, justifyContent center]] [text "+"]]
 
+soundToText : Sound -> String
+soundToText sound = case sound of
+    Tch -> "tch"
+    Tin -> "tin"
+    Ton -> "ton"
+    SomeTch -> "*-tch"
+    _ -> ""
+
 view : Model -> Html Msg
 view model = div [css [width (px 1000), padding (px 50), alignSelf center, alignItems center]]
             [ div [css [height (px 70), maxWidth (px 800), width (pct 100), padding (px 10), display inlineBlock, borderedBox, alignItems center]] 
                 ((List.map (\sound -> div [ css 
-                                            [ width (px 50)
+                                            [ minWidth (px 50)
                                             , height (px 50)
                                             , borderedBox
                                             , (soundBorder model sound)]
-                                        , onClick (soundSelectorMeessage model sound)] [renderSound sound]) model.toolbar.sounds) ++ [lineAdders])
+                                        , onClick (soundSelectorMeessage model sound)] 
+                                        [renderSound sound, div [css [height (pct 100), displayFlex, justifyContent center, alignItems center]] [span [css [whiteSpace noWrap]] [text (soundToText sound)]]]) model.toolbar.sounds) ++ [lineAdders])
             , div [css 
                 [ width (px 900)
                 , height (pct 100)
