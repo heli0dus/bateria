@@ -119,8 +119,8 @@ indexedList =
 
 lineAdders : Html Msg
 lineAdders = div [css [horizontalContainer, alignSelf right, marginLeft auto, marginRight (px 10)]] 
-                        [ div [onClick RemoveLine, css [width (px 50), height (px 50), backgroundColor (hex "#e78284"), alignItems middle, justifyContent center]] [text "-"]
-                        , div [onClick AddLine, css [width (px 50), height (px 50), backgroundColor (hex "#a6d189")]] [text "+"]]
+                        [ div [onClick RemoveLine, css [borderedBox, width (px 50), height (px 50), backgroundColor (hex "#e78284"), alignItems center, justifyContent center]] [text "-"]
+                        , div [onClick AddLine, css [borderedBox, width (px 50), height (px 50), backgroundColor (hex "#a6d189"), alignItems center, justifyContent center]] [text "+"]]
 
 view : Model -> Html Msg
 view model = div [css [width (px 1000), padding (px 50), alignSelf center, alignItems center]]
