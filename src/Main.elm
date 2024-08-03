@@ -52,6 +52,8 @@ type Msg
   = AddSound Int Int
   | CnahgeAssets AssetStyle
   | SetActiveSound Sound
+  | AddLine
+  | RemoveLine
 
 setSound : Sound -> Int -> Int -> List Beat -> List Beat
 setSound snd beat idx beats = 
@@ -84,6 +86,16 @@ update msg model = case msg of
             track = model.track
             new_track = {track| beats = setSound model.toolbar.sound beat snd track.beats}
         in {model| track = new_track}
+    AddLine -> 
+        let
+            track = model.track
+            new_track = {track | beats = (track.beats ++ (List.repeat 4 emptyBeat))}
+        in  {model | track = new_track}
+    RemoveLine -> 
+        let
+            track = model.track
+            new_track = {track | beats = List.take (length track.beats - 4) track.beats}
+        in  if (length model.track.beats <= 4) then model else {model | track = new_track}
     _ -> model
 
 
@@ -105,15 +117,20 @@ indexedList =
             (x :: xss) -> ((idx, x) :: (inner (idx + 1) xss))
     in inner 0
 
+lineAdders : Html Msg
+lineAdders = div [css [horizontalContainer, alignSelf right, marginLeft auto, marginRight (px 10)]] 
+                        [ div [onClick RemoveLine, css [width (px 50), height (px 50), backgroundColor (hex "#e78284"), alignItems middle, justifyContent center]] [text "-"]
+                        , div [onClick AddLine, css [width (px 50), height (px 50), backgroundColor (hex "#a6d189")]] [text "+"]]
+
 view : Model -> Html Msg
 view model = div [css [width (px 1000), padding (px 50), alignSelf center, alignItems center]]
             [ div [css [height (px 70), maxWidth (px 800), width (pct 100), padding (px 10), display inlineBlock, borderedBox, alignItems center]] 
-                (List.map (\sound -> div [ css 
+                ((List.map (\sound -> div [ css 
                                             [ width (px 50)
                                             , height (px 50)
                                             , borderedBox
                                             , (soundBorder model sound)]
-                                        , onClick (soundSelectorMeessage model sound)] [renderSound sound]) model.toolbar.sounds)
+                                        , onClick (soundSelectorMeessage model sound)] [renderSound sound]) model.toolbar.sounds) ++ [lineAdders])
             , div [css 
                 [ width (px 900)
                 , height (pct 100)
