@@ -223,10 +223,10 @@ borderedBox = batch
 renderSound : Sound -> Html Msg
 renderSound sound = 
     case sound of
-        Tch -> img [src "./assets/tch.svg", css [soundStyle]] []
-        Ton -> img [src "./assets/ton.svg", css [soundStyle]] []
-        Tin -> img [src "./assets/tin.svg", css [soundStyle]] []
-        SomeTch -> img [src "./assets/sometch.svg", css [soundStyle]] []
+        Tch -> img [src "../assets/tch.svg", css [soundStyle]] []
+        Ton -> img [src "../assets/ton.svg", css [soundStyle]] []
+        Tin -> img [src "../assets/tin.svg", css [soundStyle]] []
+        SomeTch -> img [src "../assets/sometch.svg", css [soundStyle]] []
         NoSound -> img [] []
 
 
