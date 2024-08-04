@@ -6230,7 +6230,13 @@ var $author$project$Main$setSound = F4(
 						var xs = beatss.b;
 						switch (idx) {
 							case 0:
-								return A2(
+								return _Utils_eq(x.beat, snd) ? A2(
+									$elm$core$List$cons,
+									$author$project$Model$BerimbauBeat(
+										_Utils_update(
+											x,
+											{beat: $author$project$Model$NoSound})),
+									xs) : A2(
 									$elm$core$List$cons,
 									$author$project$Model$BerimbauBeat(
 										_Utils_update(
@@ -6238,7 +6244,13 @@ var $author$project$Main$setSound = F4(
 											{beat: snd})),
 									xs);
 							case 1:
-								return A2(
+								return _Utils_eq(x.firstOf3, snd) ? A2(
+									$elm$core$List$cons,
+									$author$project$Model$BerimbauBeat(
+										_Utils_update(
+											x,
+											{firstOf3: $author$project$Model$NoSound})),
+									xs) : A2(
 									$elm$core$List$cons,
 									$author$project$Model$BerimbauBeat(
 										_Utils_update(
@@ -6246,7 +6258,13 @@ var $author$project$Main$setSound = F4(
 											{firstOf3: snd})),
 									xs);
 							case 2:
-								return A2(
+								return _Utils_eq(x.firstOf2, snd) ? A2(
+									$elm$core$List$cons,
+									$author$project$Model$BerimbauBeat(
+										_Utils_update(
+											x,
+											{firstOf2: $author$project$Model$NoSound})),
+									xs) : A2(
 									$elm$core$List$cons,
 									$author$project$Model$BerimbauBeat(
 										_Utils_update(
@@ -6254,7 +6272,13 @@ var $author$project$Main$setSound = F4(
 											{firstOf2: snd})),
 									xs);
 							case 3:
-								return A2(
+								return _Utils_eq(x.secondOf3, snd) ? A2(
+									$elm$core$List$cons,
+									$author$project$Model$BerimbauBeat(
+										_Utils_update(
+											x,
+											{secondOf3: $author$project$Model$NoSound})),
+									xs) : A2(
 									$elm$core$List$cons,
 									$author$project$Model$BerimbauBeat(
 										_Utils_update(
@@ -6262,7 +6286,13 @@ var $author$project$Main$setSound = F4(
 											{secondOf3: snd})),
 									xs);
 							case 4:
-								return A2(
+								return _Utils_eq(x.secondOf2, snd) ? A2(
+									$elm$core$List$cons,
+									$author$project$Model$BerimbauBeat(
+										_Utils_update(
+											x,
+											{secondOf2: $author$project$Model$NoSound})),
+									xs) : A2(
 									$elm$core$List$cons,
 									$author$project$Model$BerimbauBeat(
 										_Utils_update(
@@ -6270,7 +6300,13 @@ var $author$project$Main$setSound = F4(
 											{secondOf2: snd})),
 									xs);
 							case 5:
-								return A2(
+								return _Utils_eq(x.thirdOf3, snd) ? A2(
+									$elm$core$List$cons,
+									$author$project$Model$BerimbauBeat(
+										_Utils_update(
+											x,
+											{thirdOf3: $author$project$Model$NoSound})),
+									xs) : A2(
 									$elm$core$List$cons,
 									$author$project$Model$BerimbauBeat(
 										_Utils_update(

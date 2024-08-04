@@ -61,12 +61,12 @@ setSound snd beat idx beats =
         inner cur beatss = if (cur == beat) then 
                 case beatss of
                 ((BerimbauBeat x)::xs) -> case idx of
-                    0 -> (BerimbauBeat {x | beat = snd}) :: xs
-                    1 -> (BerimbauBeat {x | firstOf3 = snd}) :: xs
-                    2 -> (BerimbauBeat {x | firstOf2 = snd}) :: xs
-                    3 -> (BerimbauBeat {x | secondOf3 = snd}) :: xs
-                    4 -> (BerimbauBeat {x | secondOf2 = snd}) :: xs
-                    5 -> (BerimbauBeat {x | thirdOf3 = snd}) :: xs
+                    0 -> if x.beat == snd then (BerimbauBeat {x | beat = NoSound}) :: xs else (BerimbauBeat {x | beat = snd}) :: xs
+                    1 -> if x.firstOf3 == snd then (BerimbauBeat {x | firstOf3 = NoSound}) :: xs else (BerimbauBeat {x | firstOf3 = snd}) :: xs
+                    2 -> if x.firstOf2 == snd then (BerimbauBeat {x | firstOf2 = NoSound}) :: xs else (BerimbauBeat {x | firstOf2 = snd}) :: xs
+                    3 -> if x.secondOf3 == snd then (BerimbauBeat {x | secondOf3 = NoSound}) :: xs else (BerimbauBeat {x | secondOf3 = snd}) :: xs
+                    4 -> if x.secondOf2 == snd then (BerimbauBeat {x | secondOf2 = NoSound}) :: xs else (BerimbauBeat {x | secondOf2 = snd}) :: xs
+                    5 -> if x.thirdOf3 == snd then (BerimbauBeat {x | thirdOf3 = NoSound}) :: xs else (BerimbauBeat {x | thirdOf3 = snd}) :: xs
                     _ -> beatss
                 [] -> []
                 else case beatss of
