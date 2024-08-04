@@ -119,8 +119,8 @@ indexedList =
 
 lineAdders : Html Msg
 lineAdders = div [css [horizontalContainer, alignSelf right, marginLeft auto, marginRight (px 10)]] 
-                        [ div [onClick RemoveLine, css [borderedBox, width (px 50), height (px 50), backgroundColor (hex "#e78284"), alignItems center, justifyContent center]] [text "-"]
-                        , div [onClick AddLine, css [borderedBox, width (px 50), height (px 50), backgroundColor (hex "#a6d189"), alignItems center, justifyContent center]] [text "+"]]
+                        [ button [onClick RemoveLine, css [borderedBox, width (px 50), height (px 50), backgroundColor (hex "#e78284"), alignItems center, justifyContent center, borderRadius4 (px 5) (px 0) (px 0) (px 5)]] [text "-"]
+                        , button [onClick AddLine, css [borderedBox, width (px 50), height (px 50), backgroundColor (hex "#a6d189"), alignItems center, justifyContent center, borderRadius4  (px 0) (px 5) (px 5) (px 0)]] [text "+"]]
 
 soundToText : Sound -> String
 soundToText sound = case sound of
@@ -130,16 +130,57 @@ soundToText sound = case sound of
     SomeTch -> "*-tch"
     _ -> ""
 
-view : Model -> Html Msg
-view model = div [css [width (px 1000), padding (px 50), alignSelf center, alignItems center]]
-            [ div [css [height (px 70), maxWidth (px 800), width (pct 100), padding (px 10), display inlineBlock, borderedBox, alignItems center]] 
-                ((List.map (\sound -> div [ css 
+roundedButtonBlock : Model -> List Sound -> List (Html Msg)
+roundedButtonBlock model sounds = case sounds of
+    (snd :: []) -> [div [ css 
                                             [ minWidth (px 50)
                                             , height (px 50)
                                             , borderedBox
-                                            , (soundBorder model sound)]
-                                        , onClick (soundSelectorMeessage model sound)] 
-                                        [renderSound sound, div [css [height (pct 100), displayFlex, justifyContent center, alignItems center]] [span [css [whiteSpace noWrap]] [text (soundToText sound)]]]) model.toolbar.sounds) ++ [lineAdders])
+                                            , (soundBorder model snd)
+                                            , borderRadius (px 5)]
+                                        , onClick (soundSelectorMeessage model snd)] 
+                                        [renderSound snd, div [css [height (pct 100), displayFlex, justifyContent center, alignItems center]] [span [css [whiteSpace noWrap]] [text (soundToText snd)]]]]
+    (snd :: snds) -> (div [ css 
+                            [ minWidth (px 50)
+                            , height (px 50)
+                            , borderedBox
+                            , (soundBorder model snd)
+                            , borderRadius4 (px 5) (px 0) (px 0) (px 5)]
+                        , onClick (soundSelectorMeessage model snd)] 
+                        [renderSound snd, div [css [height (pct 100), displayFlex, justifyContent center, alignItems center]] [span [css [whiteSpace noWrap]] [text (soundToText snd)]]]) :: (lastRoundedButtonClock model snds)
+    [] -> []
+
+lastRoundedButtonClock : Model -> List Sound -> List (Html Msg)
+lastRoundedButtonClock model sounds = case sounds of
+    (snd :: []) -> [div [ css 
+                                            [ minWidth (px 50)
+                                            , height (px 50)
+                                            , borderedBox
+                                            , (soundBorder model snd)
+                                            , borderRadius4 (px 0) (px 5) (px 5) (px 0)]
+                                        , onClick (soundSelectorMeessage model snd)] 
+                                        [renderSound snd, div [css [height (pct 100), displayFlex, justifyContent center, alignItems center]] [span [css [whiteSpace noWrap]] [text (soundToText snd)]]]]
+    (snd :: snds) -> (div [ css 
+                            [ minWidth (px 50)
+                            , height (px 50)
+                            , borderedBox
+                            , (soundBorder model snd)]
+                        , onClick (soundSelectorMeessage model snd)] 
+                        [renderSound snd, div [css [height (pct 100), displayFlex, justifyContent center, alignItems center]] [span [css [whiteSpace noWrap]] [text (soundToText snd)]]]) :: (lastRoundedButtonClock model snds)
+    [] -> []
+    
+
+view : Model -> Html Msg
+view model = div [css [width (px 1000), padding (px 50), alignSelf center, alignItems center]]
+            [ div [css [height (px 70), maxWidth (px 800), width (pct 100), padding (px 10), display inlineBlock, borderedBox, alignItems center, borderRadius (px 5)]] 
+                -- ((List.map (\sound -> div [ css 
+                --                             [ minWidth (px 50)
+                --                             , height (px 50)
+                --                             , borderedBox
+                --                             , (soundBorder model sound)]
+                --                         , onClick (soundSelectorMeessage model sound)] 
+                --                         [renderSound sound, div [css [height (pct 100), displayFlex, justifyContent center, alignItems center]] [span [css [whiteSpace noWrap]] [text (soundToText sound)]]]) model.toolbar.sounds) ++ [lineAdders])
+                ((roundedButtonBlock model model.toolbar.sounds) ++ [lineAdders])
             , div [css 
                 [ width (px 900)
                 , height (pct 100)
@@ -163,13 +204,6 @@ partitionBy: Int -> List a -> List (List a)
 partitionBy sz xs = case xs of
     [] -> []
     (_ :: _) -> List.take sz xs :: partitionBy sz (List.drop sz xs) 
-
--- trackHtml : TrackModel -> Html Msg
--- trackHtml track = 
---     div [class "track-holder"] 
---     [ div [class "track-descriptor"] [text track.instrument]
---     , div [class "beats-holder"] (List.map renderBeat track.beats)
---     ]
 
 renderBeat : Int -> Beat -> Html Msg
 renderBeat idx (BerimbauBeat beat) = 
